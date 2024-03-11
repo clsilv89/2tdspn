@@ -16,14 +16,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showFragments() {
+        var segundoFragment = SegundoFragment()
+        var primeiroFragment = PrimeiroFragment.newInstance("", "", {
+            segundoFragment.printString(it)
+        })
         supportFragmentManager
             .beginTransaction()
-            .replace(binding.frameLayoutPrimeiroFragment.id, PrimeiroFragment())
+            .replace(
+                binding.frameLayoutPrimeiroFragment.id,
+                primeiroFragment
+            )
             .commit()
 
         supportFragmentManager
             .beginTransaction()
-            .replace(binding.frameLayoutSegundoFragment.id, SegundoFragment())
+            .replace(
+                binding.frameLayoutSegundoFragment.id,
+                segundoFragment
+            )
             .commit()
     }
 }

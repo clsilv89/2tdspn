@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import com.caiosilva.aula11mar.databinding.FragmentPrimeiroBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +23,9 @@ class PrimeiroFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var onClick: (string: String) -> Unit
+    private lateinit var binding: FragmentPrimeiroBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -30,11 +35,34 @@ class PrimeiroFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_primeiro, container, false)
+
+        binding = FragmentPrimeiroBinding.inflate(inflater)
+        showList()
+
+        return binding.root
+    }
+
+    private fun showList() {
+        val lista: List<String> =
+            listOf(
+                "Gol", "Parati", "Saveiro", "Santana", "Brasilia", "Variant", "Passat",
+                "Gol", "Parati", "Saveiro", "Santana", "Brasilia", "Variant", "Passat",
+                "Gol", "Parati", "Saveiro", "Santana", "Brasilia", "Variant", "Passat"
+            )
+
+        val adapter: ArrayAdapter<String> = ArrayAdapter(
+            requireActivity(),
+            android.R.layout.simple_list_item_1,
+            lista
+        )
+        binding.primeiroFragmentListView.adapter = adapter
+        binding.primeiroFragmentListView.setOnItemClickListener { _, _, position, _ ->
+            onClick(lista[position])
+        }
     }
 
     companion object {
@@ -48,8 +76,9 @@ class PrimeiroFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(param1: String, param2: String, onClick: (string: String) -> Unit) =
             PrimeiroFragment().apply {
+                this.onClick = onClick
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
